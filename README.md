@@ -1,2 +1,2 @@
 # custom-global-store
-Custom implementation of famous Redux library.
+Custom simple implementation of famous Redux library.
