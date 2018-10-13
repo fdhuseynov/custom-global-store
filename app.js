@@ -1,19 +1,31 @@
 require('./Store');
 
-var reducer1InitialState = {
+
+/**
+ * 
+ * TEST APP FOR THE STORE LIB
+ * 
+ */
+
+
+ /** Initial state for the counter reducer. */
+var counterInitialState = {
     count: 0
 };
 
-var reducer2InitialState = {
+/** Initial state for the timer reducer */
+var timerInitialState = {
     time: 0
 };
 
+/** Global initial state for passing to the createStore function */
 var appInitialState = {
-    counter: reducer1InitialState,
-    timer: reducer2InitialState
+    counter: counterInitialState,
+    timer: timerInitialState
 };
 
-var reducer1 = function(state = reducer1InitialState, action) {
+/** Counter reducer */
+var counter = function(state = counterInitialState, action) {
     switch (action.type) {
         case 'INCREMENT_COUNTER':
             return Object.assign({}, state, { count: state.count + 1 });
@@ -22,7 +34,8 @@ var reducer1 = function(state = reducer1InitialState, action) {
     }
 }
 
-var reducer2 = function(state = reducer2InitialState, action) {
+/** Timer reducer */
+var timer = function(state = timerInitialState, action) {
     switch(action.type) {
         case 'INCREMENT_TIMER':
             return Object.assign({}, state, { time: state.time + 1 });
@@ -31,14 +44,18 @@ var reducer2 = function(state = reducer2InitialState, action) {
     }
 }
 
+/** Init the store. */
 var store = Store();
 
+/** Combine the 2 reducers into a single object. */
 var combinedReducers = store.combineReducers({
-    reducer1,
-    reducer2
+    counter,
+    timer
 });
 
+/** Create the store. */
 store.createStore(combinedReducers, appInitialState);
 
+/** Dispatch an action. */
 store.dispatch({type: 'INCREMENT_COUNTER'});
 console.log(store.getState());
