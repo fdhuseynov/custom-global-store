@@ -29,6 +29,8 @@ var counter = function(state = counterInitialState, action) {
     switch (action.type) {
         case 'INCREMENT_COUNTER':
             return Object.assign({}, state, { count: state.count + 1 });
+        case 'DECREMENT_COUNTER':
+            return Object.assign({}, state, { count: state.count - 1 });
         default:
             return state;
     }
@@ -39,6 +41,8 @@ var timer = function(state = timerInitialState, action) {
     switch(action.type) {
         case 'INCREMENT_TIMER':
             return Object.assign({}, state, { time: state.time + 1 });
+        case 'DECREMENT_TIMER':
+            return Object.assign({}, state, { time: state.time - 1});
         default:
             return state;
     }
@@ -55,7 +59,24 @@ var combinedReducers = store.combineReducers({
 
 /** Create the store. */
 store.createStore(combinedReducers, appInitialState);
-
-/** Dispatch an action. */
-store.dispatch({type: 'INCREMENT_COUNTER'});
+console.log('\nAFTER CREATE STORE:');
 console.log(store.getState());
+
+/** Dispatch actions and show result state. */
+store.dispatch({ type: 'INCREMENT_COUNTER' });
+console.log('\nAFTER INCREMENT_COUNTER:');
+console.log(store.getState())
+
+store.dispatch({ type: 'INCREMENT_TIMER' });
+console.log('\nAFTER INCREMENT_TIMER:');
+console.log(store.getState());
+
+store.dispatch({ type: 'INCREMENT_TIMER' });
+console.log('\nAFTER INCREMENT_TIMER:');
+console.log(store.getState());
+
+store.dispatch({ type: 'DECREMENT_TIMER' });
+console.log('\nAFTER DECREMENT_TIMER:');
+console.log(store.getState());
+
+console.log();

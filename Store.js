@@ -46,11 +46,16 @@ module.exports = (function(global) {
                 } else {
                     throw Error('[Store] => createStore(): {initialState} must be an object.');
                 }
+            } else {
+                storeState = Store.initReducers();
             }
         },
 
         /**
          * Combines all the reducers into a single object.
+         * 
+         * @param {object} reducers
+         * @returns {obejct}
          */
         combineReducers: function(reducers) {
             if (typeof reducers != 'object') {
@@ -76,8 +81,7 @@ module.exports = (function(global) {
         dispatch: function(action) {
             if (action.type) {
                 for (reducer in storeReducers) {
-                    console.log('STORE: ' + storeState[reducer]);
-                    Store.mutateState(storeReducers[reducer](storeState[reducer], action));
+                    storeState[reducer] = storeReducers[reducer](storeState[reducer], action);
                 }
             } else {
                 throw Error('[Store] => dispatch(): {action} object must have a {type} property');
@@ -107,12 +111,15 @@ module.exports = (function(global) {
     }
 
     /**
-     * The only function that can mutate the global state.
-     * 
-     * @param {object} newState
+     * Initializes the reducers by calling them one by one.
      */
-    Store.mutateState = function(newState) {
-        storeState = Object.assign({}, storeState, newState);
+    Store.initReducers = function() {
+        var result = {};
+        for (reducer in storeReducers) {
+            result[reducer] = storeReducers[reducer](undefined, { type: undefined });
+        }
+        
+        return result;
     }
 
     Store.init.prototype = Store.prototype;
